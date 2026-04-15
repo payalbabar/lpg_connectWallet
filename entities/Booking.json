@@ -1,0 +1,84 @@
+{
+  "name": "Booking",
+  "type": "object",
+  "properties": {
+    "booking_id": {
+      "type": "string",
+      "description": "Unique booking reference"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "customer_phone": {
+      "type": "string"
+    },
+    "customer_address": {
+      "type": "string"
+    },
+    "cylinder_type": {
+      "type": "string",
+      "enum": [
+        "14.2kg_domestic",
+        "19kg_commercial",
+        "5kg_portable",
+        "47.5kg_industrial"
+      ]
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "dispatched",
+        "in_transit",
+        "delivered",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "online",
+        "cod",
+        "subsidy_wallet"
+      ]
+    },
+    "total_amount": {
+      "type": "number"
+    },
+    "subsidy_applied": {
+      "type": "number",
+      "default": 0
+    },
+    "final_amount": {
+      "type": "number"
+    },
+    "delivery_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "distributor_name": {
+      "type": "string"
+    },
+    "block_hash": {
+      "type": "string",
+      "description": "Blockchain hash for this transaction"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "customer_name",
+    "customer_phone",
+    "customer_address",
+    "cylinder_type",
+    "quantity",
+    "payment_method"
+  ]
+}

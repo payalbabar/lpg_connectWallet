@@ -1,0 +1,58 @@
+{
+  "name": "Cylinder",
+  "type": "object",
+  "properties": {
+    "cylinder_code": {
+      "type": "string",
+      "description": "Unique cylinder barcode/ID"
+    },
+    "cylinder_type": {
+      "type": "string",
+      "enum": [
+        "14.2kg_domestic",
+        "19kg_commercial",
+        "5kg_portable",
+        "47.5kg_industrial"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "assigned",
+        "in_transit",
+        "delivered",
+        "empty_returned",
+        "maintenance"
+      ],
+      "default": "available"
+    },
+    "current_location": {
+      "type": "string"
+    },
+    "distributor": {
+      "type": "string"
+    },
+    "last_inspection_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "manufacture_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "weight_kg": {
+      "type": "number"
+    },
+    "assigned_booking_id": {
+      "type": "string"
+    },
+    "batch_number": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "cylinder_code",
+    "cylinder_type"
+  ]
+}

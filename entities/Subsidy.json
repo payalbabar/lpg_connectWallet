@@ -1,0 +1,57 @@
+{
+  "name": "Subsidy",
+  "type": "object",
+  "properties": {
+    "subsidy_type": {
+      "type": "string",
+      "enum": [
+        "bpl",
+        "apl",
+        "ujjwala",
+        "pmuy",
+        "state_scheme"
+      ]
+    },
+    "amount": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "credited",
+        "rejected",
+        "expired"
+      ],
+      "default": "pending"
+    },
+    "booking_id": {
+      "type": "string"
+    },
+    "beneficiary_name": {
+      "type": "string"
+    },
+    "aadhaar_linked": {
+      "type": "boolean",
+      "default": false
+    },
+    "bank_account_last4": {
+      "type": "string"
+    },
+    "credited_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "block_hash": {
+      "type": "string"
+    },
+    "remarks": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "subsidy_type",
+    "amount",
+    "beneficiary_name"
+  ]
+}

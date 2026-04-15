@@ -1,0 +1,53 @@
+{
+  "name": "SupplyChainBlock",
+  "type": "object",
+  "properties": {
+    "block_index": {
+      "type": "number"
+    },
+    "block_hash": {
+      "type": "string"
+    },
+    "previous_hash": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "booking_id": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "booking_created",
+        "payment_verified",
+        "cylinder_assigned",
+        "quality_check",
+        "dispatched",
+        "in_transit",
+        "delivered",
+        "subsidy_credited"
+      ]
+    },
+    "event_data": {
+      "type": "string",
+      "description": "JSON string of event details"
+    },
+    "location": {
+      "type": "string"
+    },
+    "verified_by": {
+      "type": "string"
+    },
+    "nonce": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "block_hash",
+    "previous_hash",
+    "booking_id",
+    "event_type"
+  ]
+}
