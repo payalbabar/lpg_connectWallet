@@ -20,5 +20,6 @@ const realClient = createClient({
   appBaseUrl
 });
 
+console.log('Base44 Client Initialized with App ID:', appId, 'Using Mock:', (appId === 'test-app-id' || !appId));
 export const base44 = (appId === 'test-app-id' || !appId) ? mockBase44 : realClient;
 

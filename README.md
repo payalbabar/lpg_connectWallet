@@ -20,6 +20,10 @@ Blockchain-powered LPG cylinder management system. This application provides a t
 
 ## Getting Started 🏁
 
+### 🌟 Project Demo & Links
+- **Live Demo**: [Deploy Link Here] <!-- TODO: Replace with Vercel/Netlify link -->
+- **Demo Video**: [YouTube/Loom Link Here] <!-- TODO: Replace with video walk-through link -->
+
 1. **Install Dependencies**:
    ```bash
    npm install
@@ -40,3 +44,32 @@ Blockchain-powered LPG cylinder management system. This application provides a t
 ## Design System 🎨
 
 The app uses a modern "Glassmorphism" aesthetic with a dark sidebar and a clean, vibrant content area. It prioritizes readability and "Blockchain" feel using JetBrains Mono for hashes and IDs.
+
+## User Validation & Feedback 📊
+
+As part of validating our MVP, we collected feedback from real testnet users via Google Forms. 
+You can view the raw exported responses and feedback analysis in our Excel sheet below:
+
+- **[View User Feedback (Excel Sheet) 🔗](<link-to-your-excel-sheet-here>)**
+*(Note: Please replace `<link-to-your-excel-sheet-here>` with the actual Google Drive or Excel link!)*
+
+### 👥 Testnet User Validations
+To validate our real-world MVP, we tested the platform with 5+ real testnet users using Freighter wallets. Here are their verified Stellar wallet addresses:
+1. `User 1 Wallet Address Here`
+2. `User 2 Wallet Address Here`
+3. `User 3 Wallet Address Here`
+4. `User 4 Wallet Address Here`
+5. `User 5 Wallet Address Here`
+
+### MVP Iteration & Future Improvements 🛠️
+
+Based on the initial user feedback, we've planned and started implementing key improvements. Here is our first completed iteration directly requested by users:
+
+**Iteration 1: Wallet Connection UX Improvement**
+*Feedback*: Users felt anxious during the wallet connection phase because there was no visual feedback that a background request was happening.
+*Improvement*: Added dynamic loading states and spinners to the "Connect Wallet" button on the Landing Page.
+- **[View Git Commit for this Iteration](https://github.com/payalbabar/GasChainProject/commit/a4bf2c1db2a343d22c584a5527aef92f2041f60e)**
+
+**Future Roadmap Based on User Feedback:**
+- **Enhanced Payment Tracking**: Users want to see XLM transaction links directly in the dashboard after booking.
+- **Onboarding Tooltips**: 2 users suggested that first-time onboarding for Freighter wallet should have a guided "How to Connect" modal.

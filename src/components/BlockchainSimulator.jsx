@@ -53,29 +53,59 @@ export default function BlockchainSimulator() {
         setLastEvent(`New Booking ${id}`);
         toast({ title: "Real-time Event", description: `New booking ${id} recorded on chain.` });
       } else {
-        const bookings = await base44.entities.Booking.list("-created_date", 20);
-        const active = bookings.filter(b => b.status === 'pending');
+        const bookings = await base44.entities.Booking.list("-created_date", 50);
         
-        if (active.length > 0) {
-          const b = active[Math.floor(Math.random() * active.length)];
-          const nextStatus = 'confirmed';
+        // Find bookings that can progress
+        const eligible = bookings.filter(b => ['pending', 'confirmed', 'dispatched', 'in_transit'].includes(b.status));
+        
+        if (eligible.length > 0) {
+          const b = eligible[Math.floor(Math.random() * eligible.length)];
+          let nextStatus, eventType, eventLabel, location;
+
+          if (b.status === 'pending') {
+            nextStatus = 'confirmed';
+            eventType = 'cylinder_assigned';
+            eventLabel = 'Cylinder Assigned';
+            location = 'LPG Bottling Plant';
+          } else if (b.status === 'confirmed') {
+            nextStatus = 'dispatched';
+            eventType = 'dispatched';
+            eventLabel = 'Dispatched from Warehouse';
+            location = 'Regional Logistics Hub';
+          } else if (b.status === 'dispatched') {
+            nextStatus = 'in_transit';
+            eventType = 'in_transit';
+            eventLabel = 'In Transit';
+            location = 'City Toll / Entry Point';
+          } else if (b.status === 'in_transit') {
+            nextStatus = 'delivered';
+            eventType = 'delivered';
+            eventLabel = 'Delivered to Consumer';
+            location = b.customer_address || 'Customer Location';
+          }
+
           const prevHash = b.block_hash;
-          const newHash = generateBlockHash(prevHash, { status: nextStatus });
+          const newHash = generateBlockHash(prevHash, { status: nextStatus, event: eventType });
+          const nextIndex = (bookings.filter(bl => bl.booking_id === b.booking_id).length || 1) + 1; 
+          // Wait, index should be based on number of blocks for this booking.
+          // Let's get actual blocks for this booking to be precise.
+          const existingBlocks = await base44.entities.SupplyChainBlock.filter({ booking_id: b.booking_id });
 
           await base44.entities.Booking.update(b.id, { status: nextStatus, block_hash: newHash });
           await base44.entities.SupplyChainBlock.create({
-            block_index: 2,
+            block_index: existingBlocks.length + 1,
             block_hash: newHash,
             previous_hash: prevHash,
             timestamp: new Date().toISOString(),
             booking_id: b.booking_id,
-            event_type: 'cylinder_assigned',
-            event_data: JSON.stringify({ status: nextStatus }),
-            location: LOCATIONS[Math.floor(Math.random() * LOCATIONS.length)],
-            verified_by: 'Warehouse Agent',
+            event_type: eventType,
+            event_data: JSON.stringify({ status: nextStatus, remarks: "Automated blockchain update" }),
+            location: location,
+            verified_by: 'Stellar Node ' + Math.floor(Math.random() * 99),
           });
 
-          setLastEvent(`Update: ${b.booking_id} → ${nextStatus}`);
+          setLastEvent(`${b.booking_id} → ${nextStatus}`);
+          toast({ title: "Supply Chain Update", description: `${b.booking_id} status changed to ${nextStatus}` });
         }
       }
     }, 8000); // Every 8 seconds

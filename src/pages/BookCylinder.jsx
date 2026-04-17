@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/hooks/use-toast";
 import { ShoppingCart, Loader2, Shield, Wallet, MapPin } from "lucide-react";
 import { generateHash, generateBlockHash, generateBookingId, CYLINDER_PRICES, CYLINDER_LABELS } from "@/lib/blockchain";
-import { checkConnection, sendXLM } from "@/lib/freighter";
+import { checkConnection, sendXLM, retrievePublicKey } from "@/lib/freighter";
 
 const STATES_CITIES = {
   "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik"],
@@ -74,13 +74,15 @@ export default function BookCylinder() {
       try {
         toast({ title: "Connecting Wallet...", description: "Please confirm the connection request" });
 
+        const userAddress = await retrievePublicKey();
+
         // Calculate Price in XLM (Simplified: 1 INR = 0.1 XLM for demo)
         const xlmPrice = (finalAmount * 0.1).toFixed(2);
 
         toast({ title: "Payment Pending", description: `Please confirm the transaction of ${xlmPrice} XLM in Freighter` });
-        
-        // Trigger real transaction to a dummy treasury address
-        const res = await sendXLM('GAQ4A6ZBYZ2HTEETXMYNDIUKQW2VDKGUTDUMQ5CHFFV2QBNXONMWW7BB', xlmPrice);
+
+        // Trigger real transaction to a dummy treasury address (sending to self for demo reliability)
+        const res = await sendXLM(userAddress, xlmPrice);
         const txHash = res.hash || res.transaction_hash || "unknown_hash";
 
         toast({ title: "Payment Confirmed!", description: `TX: ${txHash.slice(0, 10)}...` });
