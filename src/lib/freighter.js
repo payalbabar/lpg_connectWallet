@@ -48,6 +48,15 @@ export const sendXLM = async (destination, amount) => {
   const signedTxXdr = typeof signedResult === 'string' ? signedResult : signedResult.signedTxXdr;
   if (signedResult.error) throw new Error(signedResult.error.message);
   const signedTransaction = StellarSdk.TransactionBuilder.fromXDR(signedTxXdr, networkPassphrase);
-  const res = await server.submitTransaction(signedTransaction);
-  return res;
+  try {
+    const res = await server.submitTransaction(signedTransaction);
+    return res;
+  } catch (error) {
+    console.error("Stellar Submission Error:", error.response?.data || error);
+    if (error.response?.data?.extras?.result_codes) {
+      const codes = error.response.data.extras.result_codes;
+      throw new Error(`Transaction Failed: ${codes.transaction}${codes.operations ? ' (' + codes.operations.join(', ') + ')' : ''}`);
+    }
+    throw error;
+  }
 };
