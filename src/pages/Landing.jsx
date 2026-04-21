@@ -48,7 +48,7 @@ export default function Landing() {
             <div className="h-8 w-8 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/30">
               <Flame className="h-5 w-5 text-white" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-white">GasChain</span>
+            <span className="text-xl font-bold tracking-tight text-white">GasChain <span className="text-primary-foreground/40 font-light mx-1">|</span> LPG Connect</span>
           </div>
           
           <div className="flex items-center gap-4">

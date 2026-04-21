@@ -9,6 +9,7 @@ import { useAuth } from "@/lib/AuthContext";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { path: "/dashboard/metrics", label: "Metrics", icon: LayoutDashboard },
   { path: "/book", label: "Book Cylinder", icon: ShoppingCart },
   { path: "/bookings", label: "My Bookings", icon: ClipboardList },
   { path: "/supply-chain", label: "Supply Chain", icon: Link2 },
@@ -44,7 +45,7 @@ export default function Layout() {
           </div>
           <div>
             <h1 className="text-sm font-bold text-sidebar-foreground tracking-tight">GasChain</h1>
-            <p className="text-[10px] text-sidebar-foreground/50 font-mono uppercase tracking-widest">Blockchain LPG</p>
+            <p className="text-[10px] text-sidebar-foreground/50 font-mono uppercase tracking-widest">LPG Connect</p>
           </div>
         </div>
 

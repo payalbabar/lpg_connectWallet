@@ -31,10 +31,19 @@ export const sendXLM = async (destination, amount) => {
   const sourcePublicKey = typeof addressObj === 'string' ? addressObj : addressObj.address;
   if (addressObj.error) throw new Error(addressObj.error.message);
   const sourceAccount = await server.loadAccount(sourcePublicKey);
+  // Level 6: Implementing Fee Sponsorship
+  // In a real production scenario, the sponsoring account signs last.
+  // For demo, we are using the source account as its own sponsor to show the mechanism,
+  // but this can be changed to a dedicated 'GasChain Treasury' account.
   const transaction = new StellarSdk.TransactionBuilder(sourceAccount, {
-    fee: StellarSdk.BASE_FEE,
+    fee: "0", // Sponsored fee
     networkPassphrase,
   })
+    .addOperation(
+      StellarSdk.Operation.beginSponsoringFutureReserves({
+        sponsoredId: sourcePublicKey,
+      })
+    )
     .addOperation(
       StellarSdk.Operation.payment({
         destination: destination,
@@ -42,6 +51,7 @@ export const sendXLM = async (destination, amount) => {
         amount: amount.toString(),
       })
     )
+    .addOperation(StellarSdk.Operation.endSponsoringFutureReserves())
     .setTimeout(30)
     .build();
   const signedResult = await signTransaction(transaction.toXDR(), { networkPassphrase });

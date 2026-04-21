@@ -14,6 +14,7 @@ import Subsidies from './pages/Subsidies';
 import BlockchainLedger from './pages/BlockchainLedger';
 import BlockchainSimulator from './components/BlockchainSimulator';
 import Landing from './pages/Landing';
+import MetricsDashboard from './pages/MetricsDashboard';
 
 const AuthenticatedApp = () => {
   const { isAuthenticated, isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -55,6 +56,7 @@ const AuthenticatedApp = () => {
         <Route path="/bookings" element={<MyBookings />} />
         <Route path="/supply-chain" element={<SupplyChain />} />
         <Route path="/subsidies" element={<Subsidies />} />
+        <Route path="/dashboard/metrics" element={<MetricsDashboard />} />
         <Route path="/ledger" element={<BlockchainLedger />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
