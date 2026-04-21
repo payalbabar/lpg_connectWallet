@@ -7,9 +7,9 @@ on:
     branches: [ main, master ]
 
 jobs:
-  build:
+  frontend_build:
+    name: Frontend Build & Lint
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
 
@@ -31,6 +31,29 @@ jobs:
         VITE_BASE44_APP_ID: demo-app
         VITE_BASE44_APP_BASE_URL: https://app.base44.app
 
-    - name: Deploy to Vercel (Production)
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-      run: echo "✅ Build passed — Vercel auto-deploys from main branch."
+  contract_check:
+    name: Smart Contract Check
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        toolchain: stable
+        targets: wasm32-unknown-unknown
+
+    - name: Contract Lint & Build
+      run: |
+        cd contracts/gas_chain
+        cargo check
+        cargo test
+
+  deploy_notification:
+    name: Deployment Summary
+    needs: [frontend_build, contract_check]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+    - name: Success Notification
+      run: echo "✅ Full stack build passed (Frontend + Contracts) — Ready for Vercel deployment."

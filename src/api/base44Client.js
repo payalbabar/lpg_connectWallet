@@ -6,12 +6,14 @@ import { mockData } from './mockData';
 const { appId, token, functionsVersion, appBaseUrl } = appParams;
 
 // Initialize mock data
-if (appId === 'test-app-id' || !appId) {
+const isMock = appId === 'test-app-id' || !appId;
+
+if (isMock) {
   mockData.initialize();
 }
 
-//Create a client with authentication required
-const realClient = createClient({
+// Only initialize the real client if not in mock mode to avoid 500 errors in console
+const realClient = isMock ? null : createClient({
   appId,
   token,
   functionsVersion,
@@ -20,6 +22,6 @@ const realClient = createClient({
   appBaseUrl
 });
 
-console.log('Base44 Client Initialized with App ID:', appId, 'Using Mock:', (appId === 'test-app-id' || !appId));
-export const base44 = (appId === 'test-app-id' || !appId) ? mockBase44 : realClient;
+console.log('Base44 Client Initialized with App ID:', appId, 'Using Mock:', isMock);
+export const base44 = isMock ? mockBase44 : realClient;
 

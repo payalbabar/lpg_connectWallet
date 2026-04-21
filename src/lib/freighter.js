@@ -30,20 +30,16 @@ export const sendXLM = async (destination, amount) => {
   const addressObj = await getAddress();
   const sourcePublicKey = typeof addressObj === 'string' ? addressObj : addressObj.address;
   if (addressObj.error) throw new Error(addressObj.error.message);
+  
   const sourceAccount = await server.loadAccount(sourcePublicKey);
-  // Level 6: Implementing Fee Sponsorship
-  // In a real production scenario, the sponsoring account signs last.
-  // For demo, we are using the source account as its own sponsor to show the mechanism,
-  // but this can be changed to a dedicated 'GasChain Treasury' account.
+  
+  // Use professional timeout and standard fee to avoid submission errors
   const transaction = new StellarSdk.TransactionBuilder(sourceAccount, {
-    fee: "0", // Sponsored fee
+    fee: StellarSdk.BASE_FEE, 
     networkPassphrase,
   })
-    .addOperation(
-      StellarSdk.Operation.beginSponsoringFutureReserves({
-        sponsoredId: sourcePublicKey,
-      })
-    )
+    // Note: Sponsorship requires a treasury account to sign, which isn't present in this frontend-only demo.
+    // We are keeping the structure but ensuring the transaction is valid by paying the standard fee.
     .addOperation(
       StellarSdk.Operation.payment({
         destination: destination,
@@ -51,13 +47,16 @@ export const sendXLM = async (destination, amount) => {
         amount: amount.toString(),
       })
     )
-    .addOperation(StellarSdk.Operation.endSponsoringFutureReserves())
-    .setTimeout(30)
+    .setTimeout(300) // 5 minutes timeout to allow user interaction
     .build();
+
   const signedResult = await signTransaction(transaction.toXDR(), { networkPassphrase });
   const signedTxXdr = typeof signedResult === 'string' ? signedResult : signedResult.signedTxXdr;
+  
   if (signedResult.error) throw new Error(signedResult.error.message);
+  
   const signedTransaction = StellarSdk.TransactionBuilder.fromXDR(signedTxXdr, networkPassphrase);
+  
   try {
     const res = await server.submitTransaction(signedTransaction);
     return res;
